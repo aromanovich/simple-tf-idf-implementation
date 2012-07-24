@@ -1,8 +1,8 @@
 # coding: utf-8
 import math
 import pprint
-
 import cPickle as pickle
+
 from optparse import OptionParser
 from collections import defaultdict, OrderedDict
 

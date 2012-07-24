@@ -6,6 +6,7 @@ import subprocess
 import fcntl
 import select
 import cPickle as pickle
+
 from optparse import OptionParser
 from collections import defaultdict, OrderedDict
 
@@ -42,14 +43,14 @@ lemmer = Lemmer(options.mystem_path)
 scanner = Scanner()
 
 for (document_id, document_path) in enumerate(walk(options.collection_dir)):
-    f = codecs.open(document_path, 'r', 'cp1251')
-    words = scanner.scan(f.read())
-    for word in words:
-        if word:
-            stem = lemmer.translate(word)
-            dictionary[stem].append(document_id)
-    documents.append(document_path)
-    print '.',
+    with codecs.open(document_path, 'r', 'cp1251') as f:
+        words = scanner.scan(f.read())
+        for word in words:
+            if word:
+                stem = lemmer.translate(word)
+                dictionary[stem].append(document_id)
+        documents.append(document_path)
+        print '.',
 
 items = dictionary.items()
 items.sort(key=lambda (stem, postings): len(documents))
